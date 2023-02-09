@@ -1,0 +1,27 @@
+<!-- templates/about/author.html -->
+{% extends "base.html" %}
+{% block title %}<title>Об авторе проекта</title>{% endblock %}
+{% block content %}
+    {% load static %}
+    <div class="container py-5">
+        <h3>Привет, я автор, меня зовут Артём Климов.</h3>
+        <a href="https://github.com/Temni23"> Это мой Github </a>
+        <br>
+        <a href="https://twitter.com/Klimov23">А это мой Твиттер</a>
+        <p>Давным давно, приблизительно в 2002 году я начинал свой путь в IT,
+            даже сделал свой первый сайт на тогдашнем
+            HTMLe. Потом случился перерыв 20 лет на юриспруденцию. Тепрь пришло
+            время этот перерыв завершить.
+        </p>
+        <p><b>При создании этого проекта посильную помощь и содействие мне
+            оказала моя собака Мира и
+            кофе Egoist</b></p>
+        <p class="aligncenter"><img src="{% static "img/dog.jpg" %}" alt="That"
+                                    s my dog" width="443" height="591"></p>
+        <style>
+            .aligncenter {
+                text-align: center;
+            }
+        </style>
+    </div>
+{% endblock %}

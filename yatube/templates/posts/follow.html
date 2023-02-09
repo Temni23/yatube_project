@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block title %}
+    <title>Избранные авторы
+        пользователя {{ request.user }}</title>{% endblock title %}
+{% block content %}
+<div class="container py-5">
+    {% include "includes/switcher.html" %}
+    <h1>Последние обновления на сайте </h1>
+    <article>
+        {% for post in page_obj %}
+
+            {% include "includes/post_list.html" %}
+            {% if post.group %}
+                <a href="{% url "posts:group_list" post.group.slug %}">все
+                    записи группы</a>
+            {% endif %}
+            {% if not forloop.last %}
+                <hr>{% endif %}
+
+            {% empty %}
+            <h4>Записей нет. Напишите что нибудь!</h4>
+        {% endfor %}
+        {% include "includes/paginator.html" %}
+    </article>
+</div>
+{% endblock content %}
