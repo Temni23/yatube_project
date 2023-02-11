@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from .forms import PostForm, CommentForm
 from .models import Post, Group, Comment, Follow, User
@@ -72,22 +72,36 @@ def profile(request, username):
     return render(request, template, context)
 
 
-def post_detail(request, post_id):
-    post = get_object_or_404(Post, pk=post_id)
-    form = CommentForm(request.POST or None)
-    comments = post.comment.all()
-    author = False
-    if request.user == post.author:
-        author = True
-    context = {
-        "post": post,
-        "author": author,
-        "form": form,
-        "comments": comments
-    }
-    template = "posts/post_detail.html"
-    return render(request, template, context)
+# def post_detail(request, post_id):
+#     post = get_object_or_404(Post, pk=post_id)
+#     form = CommentForm(request.POST or None)
+#     comments = post.comment.all()
+#     author = False
+#     if request.user == post.author:
+#         author = True
+#     context = {
+#         "post": post,
+#         "author": author,
+#         "form": form,
+#         "comments": comments
+#     }
+#     template = "posts/post_detail.html"
+#     return render(request, template, context)
 
+class PostDetailView(DetailView):
+    model = Post
+    template_name = "posts/post_detail.html"
+    context_object_name = "post"
+    pk_url_kwarg = "post_id"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = CommentForm(self.request.POST or None)
+        context["comments"] = self.object.comment.all()
+        context["author"] = False
+        if self.request.user == self.object.author:
+            context["author"] = True
+        return context
 
 @login_required
 def post_create(request):
